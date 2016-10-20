@@ -52,6 +52,8 @@ You can also reference a URL in a context variable, by surrounding it with curly
 
 The policy determines that it's a URL by examining the first 6 or 7 characters and comparing to http:// or https:// . Relative urls that lack a scheme will not work.
 
+The policy caches specifications. If you use a URL, then the cache key is the URL. This means that if the external YAML or JSON changes, but the URL does not change, then you need to wait for the cache to expire before the policy will read the OpenAPI spec again. Currently the cache lifetime is set to 10 minutes. This should be a problem only during development when you are actively modifying an OpenAPI Spec.
+
 
 ### Spec in a Resource file
 
