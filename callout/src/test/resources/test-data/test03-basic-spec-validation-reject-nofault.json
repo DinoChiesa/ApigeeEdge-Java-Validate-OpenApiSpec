@@ -8,7 +8,8 @@
     "my_spec" : "file://petstore-minimal.yaml",
     "message.content" : "file://payload-02-shipping-no-type.json",
     "request.verb" : "post",
-    "request.url" : "/pets"
+    "request.path" : "/api/pets",
+    "proxy.basepath" : "/api"
   },
   "expected" : {
     "result": "success",

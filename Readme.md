@@ -138,6 +138,24 @@ Whether or not the policy throws a fault, the policy sets these variables:
 | oas_error      | null if no error. a string indicating the error if the inbound request was invalid, or if there was another error (eg, invalid configuration) |
 
 
+### Validating the Base Path
+
+By default the policy does not validate the basepath on the
+request. This is because we presume that the basepath has already been
+validated by Edge when it received the request. If you would like to
+validate the basepath, you can use a configuration like this:
+
+```xml
+<JavaCallout name='Java-ValidateSchema-2'>
+  <Properties>
+    <Property name='validate-base-path'>true</Property>
+    <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
+  </Properties>
+  <ClassName>com.dinochiesa.edgecallouts.jsonschema.ValidatorCallout</ClassName>
+  <ResourceURL>java://JsonSchemaValidatorCallout.jar</ResourceURL>
+</JavaCallout>
+```
+
 
 ## Building
 

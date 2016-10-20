@@ -1,0 +1,7 @@
+<JavaCallout name='Java-Oas-Validate-Option2'>
+  <Properties>
+    <Property name='spec'>https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/yaml/petstore-minimal.yaml</Property>
+  </Properties>
+  <ClassName>com.dinochiesa.edgecallouts.openapispec.ValidatorCallout</ClassName>
+  <ResourceURL>java://edge-custom-oas-validator.jar</ResourceURL>
+</JavaCallout>

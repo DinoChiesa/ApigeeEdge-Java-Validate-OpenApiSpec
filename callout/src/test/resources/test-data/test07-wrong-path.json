@@ -1,17 +1,19 @@
 {
   "properties" : {
     "debug" : "false",
-    "spec" : "{missing_spec}"
+    "suppress-fault" : "true",
+    "spec" : "{my_spec}"
   },
   "context" : {
     "my_spec" : "file://petstore-minimal.yaml",
     "message.content" : "file://payload-01-shipping-includes-type.json",
     "request.verb" : "get",
-    "request.path" : "/api/pets",
+    "request.path" : "/api/not-pets",
     "proxy.basepath" : "/api"
   },
   "expected" : {
-    "result": "abort",
-    "error" : "spec resolves to an empty string"
+    "result": "success",
+    "valid" : false,
+    "error" : "invalid path"
   }
 }

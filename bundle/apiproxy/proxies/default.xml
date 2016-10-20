@@ -7,6 +7,12 @@
   </HTTPProxyConnection>
 
   <FaultRules>
+    <FaultRule name='oas-fault'>
+      <Step>
+        <Name>AM-OasFault</Name>
+      </Step>
+      <Condition>oas_error != null</Condition>
+    </FaultRule>
   </FaultRules>
 
   <PreFlow name='PreFlow'>
@@ -23,13 +29,12 @@
   </PostFlow>
 
   <Flows>
+    <!--
     <Flow name='test 1'>
       <Description>insert description here</Description>
       <Request>
-        <!-- insert flow-specific policies here -->
       </Request>
       <Response>
-        <!-- and others here -->
       </Response>
       <Condition>(proxy.pathsuffix MatchesPath "/t1") and (request.verb = "GET")</Condition>
     </Flow>
@@ -40,7 +45,7 @@
       </Request>
       <Response/>
     </Flow>
-
+  -->
   </Flows>
 
   <!-- keep this if no target (eg, for oauth token generation and refresh) -->

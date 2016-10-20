@@ -1,0 +1,15 @@
+<AssignMessage name='AM-OasFault'>
+  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+  <Set>
+    <Payload contentType='application/json'>{
+  "error" : {
+    "message" : "{oas_error}",
+    "detail" : "{oas_error_detail}",
+    "info" : "that request was invalid"
+  }
+}
+</Payload>
+    <StatusCode>400</StatusCode>
+  </Set>
+  <AssignTo createNew='false' transport='http' type='response'/>
+</AssignMessage>
