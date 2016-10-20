@@ -132,10 +132,11 @@ You can suppress the faults by using a property in the configuration, like this:
 
 Whether or not the policy throws a fault, the policy sets these variables:
 
-| variable name  | meaning                           |
-|:---------------|:----------------------------------|
-| oas_valid      | true if the inbound request (verb, URL, headers, payload0 message was valid with respect to the spec. false if not. |
-| oas_error      | null if no error. a string indicating the error if the inbound request was invalid, or if there was another error (eg, invalid configuration) |
+| variable name    | meaning                           |
+|:-----------------|:----------------------------------|
+| oas_valid        | true if the inbound request (verb, URL, headers, payload0 message was valid with respect to the spec. false if not. |
+| oas_error        | null if no error. a string indicating the error if the inbound request was invalid, or if there was another error (eg, invalid configuration) |
+| oas_error_detail | additional detail related to an error that occurred. For example, this may indicate the expected Accept header values, versus the provided Accept header values. |
 
 
 ### Validating the Base Path
