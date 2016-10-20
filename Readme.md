@@ -125,14 +125,14 @@ You can suppress the faults by using a property in the configuration, like this:
     <Property name='suppress-fault'>true</Property>
     <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
   </Properties>
-  <ClassName>com.dinochiesa.edgecallouts.jsonschema.ValidatorCallout</ClassName>
-  <ResourceURL>java://JsonSchemaValidatorCallout.jar</ResourceURL>
+  <ClassName>com.dinochiesa.edgecallouts.openapispec.ValidatorCallout</ClassName>
+  <ResourceURL>java://edge-custom-oas-validator.jar</ResourceURL>
 </JavaCallout>
 ```
 
 Whether or not the policy throws a fault, the policy sets these variables:
 
-|| variable name || meaning ||
+| variable name  | meaning                           |
 |:---------------|:----------------------------------|
 | oas_valid      | true if the inbound request (verb, URL, headers, payload0 message was valid with respect to the spec. false if not. |
 | oas_error      | null if no error. a string indicating the error if the inbound request was invalid, or if there was another error (eg, invalid configuration) |
@@ -151,8 +151,8 @@ validate the basepath, you can use a configuration like this:
     <Property name='validate-base-path'>true</Property>
     <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
   </Properties>
-  <ClassName>com.dinochiesa.edgecallouts.jsonschema.ValidatorCallout</ClassName>
-  <ResourceURL>java://JsonSchemaValidatorCallout.jar</ResourceURL>
+  <ClassName>com.dinochiesa.edgecallouts.openapispec.ValidatorCallout</ClassName>
+  <ResourceURL>java://edge-custom-oas-validator.jar</ResourceURL>
 </JavaCallout>
 ```
 
