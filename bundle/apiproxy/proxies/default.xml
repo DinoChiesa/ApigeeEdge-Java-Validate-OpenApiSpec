@@ -1,0 +1,49 @@
+<ProxyEndpoint name='default'>
+  <Description>Default Proxy</Description>
+  <HTTPProxyConnection>
+    <BasePath>/oas-validation</BasePath>
+    <Properties/>
+    <VirtualHost>secure</VirtualHost>
+  </HTTPProxyConnection>
+
+  <FaultRules>
+  </FaultRules>
+
+  <PreFlow name='PreFlow'>
+    <Request>
+      <Step><Name>Java-Oas-Validate</Name></Step>
+    </Request>
+      <Response/>
+  </PreFlow>
+  <PostFlow name='PostFlow'>
+      <Request/>
+      <Response>
+        <Step><Name>AM-CleanResponseHeaders</Name></Step>
+      </Response>
+  </PostFlow>
+
+  <Flows>
+    <Flow name='test 1'>
+      <Description>insert description here</Description>
+      <Request>
+        <!-- insert flow-specific policies here -->
+      </Request>
+      <Response>
+        <!-- and others here -->
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/t1") and (request.verb = "GET")</Condition>
+    </Flow>
+
+    <Flow name='unknown request'>
+      <Request>
+        <Step><Name>RF-UnknownRequest</Name></Step>
+      </Request>
+      <Response/>
+    </Flow>
+
+  </Flows>
+
+  <!-- keep this if no target (eg, for oauth token generation and refresh) -->
+  <RouteRule name='NoRouteRule'/>
+
+</ProxyEndpoint>

@@ -1,0 +1,18 @@
+{
+  "properties" : {
+    "debug" : "false",
+    "suppress-fault" : "false",
+    "spec" : "{my_spec}"
+  },
+  "context" : {
+    "my_spec" : "file://petstore-minimal.yaml",
+    "message.content" : "file://payload-02-shipping-no-type.json",
+    "request.verb" : "post",
+    "request.url" : "/pets"
+  },
+  "expected" : {
+    "result": "abort",
+    "valid" : false,
+    "error" : "invalid method"
+  }
+}

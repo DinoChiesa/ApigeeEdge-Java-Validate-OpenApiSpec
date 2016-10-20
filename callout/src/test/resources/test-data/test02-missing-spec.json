@@ -1,0 +1,16 @@
+{
+  "properties" : {
+    "debug" : "false",
+    "spec" : "{missing_spec}"
+  },
+  "context" : {
+    "my_spec" : "file://petstore-minimal.yaml",
+    "message.content" : "file://payload-01-shipping-includes-type.json",
+    "request.verb" : "get",
+    "request.url" : "/pets"
+  },
+  "expected" : {
+    "result": "abort",
+    "error" : "spec resolves to an empty string"
+  }
+}

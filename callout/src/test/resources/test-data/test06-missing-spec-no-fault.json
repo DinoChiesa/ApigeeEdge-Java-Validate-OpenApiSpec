@@ -1,0 +1,17 @@
+{
+  "properties" : {
+    "debug" : "false",
+    "suppress-fault" : "true",
+    "spec" : "{missing_schema}"
+  },
+  "context" : {
+    "message.content" : "file://payload-01-shipping-includes-type.json",
+    "request.verb" : "get",
+    "request.url" : "/pets"
+  },
+  "expected" : {
+    "result": "success",
+    "valid" : null,
+    "error" : "spec resolves to an empty string"
+  }
+}

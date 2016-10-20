@@ -1,0 +1,13 @@
+{
+  "properties" : {
+    "debug" : "false"
+  },
+  "context" : {
+    "my_spec" : "file://petstore-minimal.yaml",
+    "message.content" : "file://payload-01-shipping-includes-type.json"
+  },
+  "expected" : {
+    "result": "abort",
+    "error" : "spec is not specified"
+  }
+}

@@ -1,0 +1,12 @@
+<APIProxy revision='1' name='oas-validation'>
+  <ConfigurationVersion minorVersion='0' majorVersion='4'/>
+  <CreatedAt>1476928730801</CreatedAt>
+  <CreatedBy>dino</CreatedBy>
+  <Description></Description>
+  <DisplayName>oas-validation</DisplayName>
+  <LastModifiedAt>1476993658177</LastModifiedAt>
+  <LastModifiedBy>orgAdmin</LastModifiedBy>
+  <TargetEndpoints>
+    <TargetEndpoint>default</TargetEndpoint>
+  </TargetEndpoints>
+</APIProxy>
