@@ -50,6 +50,9 @@ You can also reference a URL in a context variable, by surrounding it with curly
 </JavaCallout>
 ```
 
+The policy determines that it's a URL by examining the first 6 or 7 characters and comparing to http:// or https:// . Relative urls that lack a scheme will not work.
+
+
 ### Spec in a Resource file
 
 You can also specify a schema file to be found in the /resources
@@ -70,8 +73,7 @@ file. You can specify the schema file name this way:
 
 This requires that you bundle the schema file into the JAR; in other words, you must recompile the JAR. 
 
-
-The named spec must exist in the edge-custom-oas-validator.jar. It must end in .json or .yaml and  must be in the resources directory.  The content of the jar
+For bundling, the named spec must exist in the edge-custom-oas-validator.jar. It must end in .json or .yaml and  must be in the resources directory.  The content of the jar
 should look like this: 
 
         meta-inf/
@@ -112,7 +114,7 @@ As above, this also requires that you bundle the referenced schema file into the
 ### Spec directly in the configuration
 
 Finally, you can insert the specification directly into the policy configuration. 
-It works with JSON or YAML.  If you use YAML, then you must include the three dash prefix
+This works with JSON or YAML. If you use YAML, then you must include the three dash prefix
 The configuration syntax looks like this:
 
 ```xml
