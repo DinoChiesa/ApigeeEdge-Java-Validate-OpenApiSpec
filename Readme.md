@@ -23,7 +23,7 @@ The Java JAR here can be used as a Java callout in Apigee Edge. It is expected t
 The callout always reads from the request context variables - request.content, request.verb, request.headers and so on.
 
 
-### Schema URL
+### Spec URL
 
 The typical case is to specify a URL at which the OAS spec can be read in. 
 
@@ -59,7 +59,6 @@ file. You can specify the schema file name this way:
 
 ```xml
 <JavaCallout name='Java-ValidateRequest'>
-  <DisplayName>Java-ValidateSchema</DisplayName>
   <Properties>
     <!-- find this spec in the JAR under /resources -->
     <Property name='spec'>spec.yaml</Property>
@@ -91,14 +90,13 @@ You can just drop spec files into the [resources](src/main/resources) directory 
 
 ### Spec in a Variable that refers to a Resource file
 
-Finally, you can specify a context variable that contains the spec
-file name. This variable will get resolved at runtime. The content of
+As a slight twist on the prior option, you can specify a context variable that contains the spec
+file name. Surround the name of the variable in curly braces. This variable will get resolved at runtime. The content of
 the variable must end with the 5 characters ".json" or ".yaml" in order to be
 recognized as a spec file.  The syntax looks like this:
 
 ```xml
 <JavaCallout name='Java-ValidateRequest'>
-  <DisplayName>Java-ValidateSchema</DisplayName>
   <Properties>
     <!-- find this spec in the JAR under /resources -->
     <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
@@ -109,6 +107,39 @@ recognized as a spec file.  The syntax looks like this:
 ```
 
 As above, this also requires that you bundle the referenced schema file into the JAR as a resource.
+
+
+### Spec directly in the configuration
+
+Finally, you can insert the specification directly into the policy configuration. 
+It works with JSON or YAML.  If you use YAML, then you must include the three dash prefix
+The configuration syntax looks like this:
+
+```xml
+<JavaCallout name='Java-ValidateRequest'>
+  <Properties>
+    <Property name='spec'>---
+  swagger: "2.0"
+  info:
+    version: "1.0.0"
+    title: "Swagger Petstore"
+    description: "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification"
+    termsOfService: "http://swagger.io/terms/"
+    contact:
+      name: "Swagger API Team"
+    license:
+      name: "MIT"
+  host: "petstore.swagger.io"
+  basePath: "/oas-validation"
+  schemes:
+    - "http"
+    ....
+    </Property>
+  </Properties>
+  <ClassName>com.dinochiesa.edgecallouts.openapispec.ValidatorCallout</ClassName>
+  <ResourceURL>java://edge-custom-oas-validator.jar</ResourceURL>
+</JavaCallout>
+```
 
 ## Behavior
 
@@ -160,6 +191,10 @@ To have the callout also validate the basepath, you can use a configuration like
 </JavaCallout>
 ```
 
+You can also use a variable, surrounded by curlies, for the
+validate-base-path property. If the variable resolves to a string that
+when lowercased matches "true", then the policy will validate the base
+path.
 
 ## Building
 

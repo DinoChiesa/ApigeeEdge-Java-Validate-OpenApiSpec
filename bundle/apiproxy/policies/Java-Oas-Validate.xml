@@ -1,5 +1,6 @@
 <JavaCallout name='Java-Oas-Validate'>
   <Properties>
+    <Property name='validate-base-path'>true</Property>
     <Property name='spec'>---
   swagger: "2.0"
   info:
