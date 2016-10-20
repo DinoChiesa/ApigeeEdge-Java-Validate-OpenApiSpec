@@ -4,7 +4,7 @@ This directory contains the Java source code and Java jars required to
 compile a Java callout for Apigee Edge that performs validation of
 a request against an OpenAPI Spec. 
 For more information on Open API Spec, see [Open API Spec](https://github.com/OAI/OpenAPI-Specification). 
-This Java callout relies on the [swagger-parser v1.0.22](https://github.com/swagger-api/swagger-parser).
+This Java callout relies on the [swagger-parser v1.0.8](https://github.com/swagger-api/swagger-parser).
 
 You do not need to compile the Java code in order to use this
 callout. It's ready for you to use, as is. However, if you wish to modify and
@@ -133,7 +133,7 @@ You can suppress the faults by using a property in the configuration, like this:
 Whether or not the policy throws a fault, the policy sets these variables:
 
 || variable name || meaning ||
-|:---------------||:----------------------------------||
+|:---------------|:----------------------------------|
 | oas_valid      | true if the inbound request (verb, URL, headers, payload0 message was valid with respect to the spec. false if not. |
 | oas_error      | null if no error. a string indicating the error if the inbound request was invalid, or if there was another error (eg, invalid configuration) |
 
