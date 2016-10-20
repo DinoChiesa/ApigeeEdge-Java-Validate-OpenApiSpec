@@ -28,7 +28,7 @@ The callout always reads from the request context variables - request.content, r
 The typical case is to specify a URL at which the OAS spec can be read in. 
 
 ```xml
-<JavaCallout name='Java-ValidateSchema-1'>
+<JavaCallout name='Java-ValidateRequest-1'>
   <Properties>
     <Property name='spec'>https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/yaml/petstore-minimal.yaml</Property>
   </Properties>
@@ -41,7 +41,7 @@ The typical case is to specify a URL at which the OAS spec can be read in.
 You can also reference a URL in a context variable, by surrounding it with curly-braces.
 
 ```xml
-<JavaCallout name='Java-ValidateSchema-1'>
+<JavaCallout name='Java-ValidateRequest-1'>
   <Properties>
     <Property name='spec'>{url_for_oas}</Property>
   </Properties>
@@ -58,7 +58,7 @@ end with the 5 characters ".json" in order to be recognized as a schema
 file. You can specify the schema file name this way:
 
 ```xml
-<JavaCallout name='Java-ValidateSchema'>
+<JavaCallout name='Java-ValidateRequest'>
   <DisplayName>Java-ValidateSchema</DisplayName>
   <Properties>
     <!-- find this spec in the JAR under /resources -->
@@ -97,7 +97,7 @@ the variable must end with the 5 characters ".json" or ".yaml" in order to be
 recognized as a spec file.  The syntax looks like this:
 
 ```xml
-<JavaCallout name='Java-ValidateSchema'>
+<JavaCallout name='Java-ValidateRequest'>
   <DisplayName>Java-ValidateSchema</DisplayName>
   <Properties>
     <!-- find this spec in the JAR under /resources -->
@@ -120,7 +120,7 @@ By default, the Java callout will return ExecutionResult.ABORT, and implicitly p
 You can suppress the faults by using a property in the configuration, like this: 
 
 ```xml
-<JavaCallout name='Java-ValidateSchema-2'>
+<JavaCallout name='Java-ValidateRequest-4'>
   <Properties>
     <Property name='suppress-fault'>true</Property>
     <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
@@ -141,13 +141,16 @@ Whether or not the policy throws a fault, the policy sets these variables:
 
 ### Validating the Base Path
 
-By default the policy does not validate the basepath on the
-request. This is because we presume that the basepath has already been
-validated by Edge when it received the request. If you would like to
-validate the basepath, you can use a configuration like this:
+By default the policy does not validate the basepath on the request. The
+presumption is that the basepath has already been validated by Edge when
+it received the request. There might be cases in which you would like to
+use the Java callout to also validate the basepath.  As one example,
+imagine a shared-flow, which applies to multiple distinct proxies.
+
+To have the callout also validate the basepath, you can use a configuration like this:
 
 ```xml
-<JavaCallout name='Java-ValidateSchema-2'>
+<JavaCallout name='Java-ValidateRequest-5'>
   <Properties>
     <Property name='validate-base-path'>true</Property>
     <Property name='spec'>{context_var_that_contains_name_of_spec_resource}</Property>
