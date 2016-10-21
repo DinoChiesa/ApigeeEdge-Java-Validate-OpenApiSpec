@@ -104,6 +104,21 @@ public class ValidatorCallout implements Execution {
         return false;
     }
 
+    public class Retriever implements OasValidator.ParameterRetriever {
+        private MessageContext msgCtxt;
+        private String varSegment;
+        public Retriever(String segment, MessageContext context) {
+            msgCtxt = context;
+            varSegment = segment;
+        }
+
+        public String get(String name) {
+            String varName = "request." + varSegment + "." + name;
+            return (String) (msgCtxt.getVariable(varName));
+        }
+    }
+
+
     public ExecutionResult execute(MessageContext msgCtxt, ExecutionContext exeCtxt) {
         try {
             msgCtxt.removeVariable(varName("error"));
@@ -113,84 +128,58 @@ public class ValidatorCallout implements Execution {
             boolean valid = true;
             OasValidator validator = new OasValidator(getSpec(msgCtxt));
 
+            // It might be simpler to collapse all of this validation down into one call
+            // into the OasValidator class. But I think I might want to make the list of
+            // validations configurable. For now the validates are individual, separate calls.
+            // We may change the interface to that class later.
+
             if (getValidateBasePath(msgCtxt)) {
                 valid = validator.validateBasePath(msgCtxt.getVariable("proxy.basepath").toString());
-                if (!valid) {
-                    msgCtxt.setVariable(varName("error"), "invalid basepath");
-                    msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                    msgCtxt.setVariable(varName("valid"), false);
-                    if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                }
             }
 
             if (valid) {
                 valid = validator.validatePath(getShortPath(msgCtxt));
-                if (!valid) {
-                    msgCtxt.setVariable(varName("error"), "invalid path");
-                    msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                    msgCtxt.setVariable(varName("valid"), false);
-                    if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                }
             }
 
             String verb="";
             if (valid) {
                 verb = ((String)msgCtxt.getVariable("request.verb")).toUpperCase();
                 valid = validator.validateVerb(verb);
-                if (!valid) {
-                    msgCtxt.setVariable(varName("error"), "invalid method");
-                    msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                    msgCtxt.setVariable(varName("valid"), false);
-                    if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                }
             }
 
             if (valid) {
-                valid = validator.validateParameters("params");
-                if (!valid) {
-                    msgCtxt.setVariable(varName("error"), "invalid parameters");
-                    msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                    msgCtxt.setVariable(varName("valid"), false);
-                    if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                }
+                valid = validator.validateParameters(new Retriever("queryparam", msgCtxt),
+                                                     new Retriever("header", msgCtxt));
             }
 
             if (valid) {
                 Object accept = msgCtxt.getVariable("request.header.accept");
                 if (accept != null) {
                     valid = validator.validateAccept(accept);
-                    if (!valid) {
-                        msgCtxt.setVariable(varName("error"), "invalid accept header");
-                        msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                        msgCtxt.setVariable(varName("valid"), false);
-                        if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                    }
                 }
             }
 
             if (valid) {
                 if (!(verb.equals("GET") || verb.equals("DELETE") || verb.equals("OPTIONS"))) {
-                    valid = validator.validateContentType(msgCtxt.getVariable("request.header.content-type").toString());
-                    if (!valid) {
-                        msgCtxt.setVariable(varName("error"), "invalid content-type header");
-                        msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                        msgCtxt.setVariable(varName("valid"), false);
-                        if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
+                    Object ctype = msgCtxt.getVariable("request.header.content-type");
+                    if (ctype != null) {
+                        valid = validator.validateContentType(ctype.toString());
                     }
-                    valid = validator.validatePayload(msgCtxt.getMessage().getContentAsStream());
-                    if (!valid) {
-                        msgCtxt.setVariable(varName("error"), "invalid payload");
-                        msgCtxt.setVariable(varName("error_detail"), validator.getErrorDetail());
-                        msgCtxt.setVariable(varName("valid"), false);
-                        if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
-                    }
+                    if (valid)
+                        valid = validator.validatePayload(msgCtxt.getMessage().getContentAsStream());
                 }
             }
 
             if (valid) {
                 msgCtxt.setVariable(varName("valid"), true);
             }
-
+            else {
+                String[] errorInfo = validator.getErrorInfo();
+                msgCtxt.setVariable(varName("error"), errorInfo[0]);
+                msgCtxt.setVariable(varName("error_detail"), errorInfo[1]);
+                msgCtxt.setVariable(varName("valid"), false);
+                if (!getSuppressFault(msgCtxt)) { return ExecutionResult.ABORT; }
+            }
         }
         catch (Exception e) {
             if (getDebug()) {
